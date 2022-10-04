@@ -1,21 +1,21 @@
 package com.faithfulolaleru.movieRentalReactive.utils;
 
-import com.faithfulolaleru.movieRentalReactive.dto.CreateMovieRequest;
-import com.faithfulolaleru.movieRentalReactive.dto.CreateMovieResponse;
+import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
+import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
 import org.springframework.beans.BeanUtils;
 
 public class AppUtils {
 
-    public static CreateMovieResponse entityToDto(Movie movie) {
-        CreateMovieResponse response = new CreateMovieResponse();
+    public static MovieResponse entityToDto(Movie movie) {
+        MovieResponse response = new MovieResponse();
         BeanUtils.copyProperties(movie, response);
 
         return response;
     }
 
-    public CreateMovieResponse entityToDto2(Movie movie) {
-        CreateMovieResponse response = CreateMovieResponse.builder()
+    public static MovieResponse entityToDto2(Movie movie) {
+        MovieResponse response = MovieResponse.builder()
                 .id(movie.getId())
                 .title(movie.getTitle())
                 .yearReleased(movie.getYearReleased())
@@ -26,13 +26,12 @@ public class AppUtils {
         return response;
     }
 
-    public Movie dtoToEntity(CreateMovieRequest request) {
+    public Movie dtoToEntity(MovieRequest request) {
         Movie movie = Movie.builder()
-                .id(movie.getId())
-                .title(movie.getTitle())
-                .yearReleased(movie.getYearReleased())
-                .mainActor(movie.getMainActor())
-                .isBlockBuster(movie.isBlockBuster())
+                .title(request.getTitle())
+                .yearReleased(request.getYearReleased())
+                .mainActor(request.getMainActor())
+                .isBlockBuster(request.isBlockBuster())
                 .build();
 
         return movie;

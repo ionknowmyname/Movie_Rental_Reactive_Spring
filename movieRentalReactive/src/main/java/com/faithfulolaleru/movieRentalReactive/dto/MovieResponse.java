@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateMovieResponse {
+public class MovieResponse {
 
     private String id;
     private String title;

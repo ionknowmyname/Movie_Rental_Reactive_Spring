@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMovieRequest {
+public class MovieRequest {
 
     private String title;
     private int yearReleased;
