@@ -2,6 +2,7 @@ package com.faithfulolaleru.movieRentalReactive.service;
 
 import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
+import com.faithfulolaleru.movieRentalReactive.exception.ErrorResponse;
 import com.faithfulolaleru.movieRentalReactive.exception.GeneralException;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
 import com.faithfulolaleru.movieRentalReactive.repository.MovieRepository;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,20 +29,21 @@ public class MovieServiceImpl implements MovieService {
     public Mono<MovieResponse> createMovie(MovieRequest request) {
         Mono<Boolean> booleanMono = movieRepository.existsByTitle(request.getTitle());
 
-        log.debug("booleanMono:  {}", booleanMono);
+        log.info("booleanMono:  {}", booleanMono);
 
         movieRepository.existsByTitle(request.getTitle())
                 .doOnNext(exists -> {
                     if (exists) {
-                        throw new GeneralException("Movie with id already exist",
-                                HttpStatus.FORBIDDEN);
+                        throw new GeneralException(HttpStatus.FORBIDDEN, ErrorResponse.ERROR_MOVIE_ALREADY_EXIST,
+                                "Movie with id already exist");
                     }
                 });
 
         Mono<Movie> movieByTitle = movieRepository.findMovieByTitle(request.getTitle());
-        movieByTitle.();
+        // Optional<Movie> movieOptional = movieByTitle.blockOptional();
 
         return movieRepository.findMovieByTitle(request.getTitle())
+                .map(movie -> throwErrorIfExist(movie))
                 .switchIfEmpty(movieRepository.save(Movie.builder()
                         .title(request.getTitle())
                         .yearReleased(request.getYearReleased())
@@ -57,9 +61,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Mono<MovieResponse> getMovieById(String id) {
         return movieRepository.findById(id)
-                .map(m -> AppUtils.entityToDto2(m))
-                .switchIfEmpty(Mono.error(new GeneralException("Movie with id doesn't exist",
-                        HttpStatus.NOT_FOUND)));    // Mono.empty()
+                .map(movie -> AppUtils.entityToDto2(movie))
+                .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_NOT_EXIST,
+                        "Movie with id doesn't exist")));    // Mono.empty()
     }
 
     @Override
@@ -87,11 +91,17 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Mono<Void> deleteMovieById(String id) {
-        return null;
+
+        return Mono.justOrEmpty(movieRepository.findById(id)).doOnNext(movie -> {
+            movieRepository.deleteById(movie.block().getId());
+            // movieRepository.delete(movie.subscribe());
+            log.info("Successfully deleted movie with id --> {}", id);
+        }).then(Mono.empty());
     }
 
 
-    private boolean isPresent(String id) {
-        return false;
+    private Movie throwErrorIfExist(Movie movie) {
+        String message = "Movie with title '" + movie.getTitle() + "' already exists";
+        throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_MOVIE_ALREADY_EXIST, message);
     }
 }

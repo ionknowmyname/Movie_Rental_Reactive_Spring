@@ -6,12 +6,13 @@ import org.springframework.http.HttpStatus;
 @Data
 public class GeneralException extends RuntimeException {
 
-    private final String message;
+    private final String error;
     private final HttpStatus httpStatus;
 
 
-    public GeneralException(String message, HttpStatus httpStatus) {
-        this.message = message;
+    public GeneralException(HttpStatus httpStatus, String error, String message) {
+        super(message);
+        this.error = error;
         this.httpStatus = httpStatus;
     }
 }
