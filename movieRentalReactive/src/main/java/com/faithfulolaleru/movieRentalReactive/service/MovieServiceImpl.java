@@ -6,6 +6,7 @@ import com.faithfulolaleru.movieRentalReactive.exception.ErrorResponse;
 import com.faithfulolaleru.movieRentalReactive.exception.GeneralException;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
 import com.faithfulolaleru.movieRentalReactive.repository.MovieRepository;
+import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import com.faithfulolaleru.movieRentalReactive.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,19 +28,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Mono<MovieResponse> createMovie(MovieRequest request) {
-        Mono<Boolean> booleanMono = movieRepository.existsByTitle(request.getTitle());
 
-        log.info("booleanMono:  {}", booleanMono);
-
-        movieRepository.existsByTitle(request.getTitle())
-                .doOnNext(exists -> {
-                    if (exists) {
-                        throw new GeneralException(HttpStatus.FORBIDDEN, ErrorResponse.ERROR_MOVIE_ALREADY_EXIST,
-                                "Movie with id already exist");
-                    }
-                });
-
-        Mono<Movie> movieByTitle = movieRepository.findMovieByTitle(request.getTitle());
+        // Mono<Movie> movieByTitle = movieRepository.findMovieByTitle(request.getTitle());
         // Optional<Movie> movieOptional = movieByTitle.blockOptional();
 
         return movieRepository.findMovieByTitle(request.getTitle())
@@ -59,25 +49,31 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Mono<MovieResponse> getMovieById(String id) {
+    public Mono<AppResponse>  getMovieById(String id) {
         return movieRepository.findById(id)
                 .map(movie -> AppUtils.entityToDto2(movie))
-                .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_NOT_EXIST,
+                .flatMap(o -> buildAppResponse(o))
+                .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,
+                        ErrorResponse.ERROR_MOVIE_NOT_EXIST,
                         "Movie with id doesn't exist")));    // Mono.empty()
     }
 
     @Override
-    public Flux<MovieResponse> getAllMovies() {
+    public Mono<AppResponse> getAllMovies() {
         return movieRepository.findAll()
                 .map(m -> AppUtils.entityToDto2(m))
-                .switchIfEmpty(Flux.empty());   //  AppUtils::entityToDto;
+                .collectList()
+                .flatMap(o -> buildAppResponse(o))
+                .switchIfEmpty(Mono.empty());   //  AppUtils::entityToDto;
     }
 
     @Override
-    public Flux<MovieResponse> getAllMoviesBetween(int startYear, int endYear) {
+    public Mono<AppResponse>  getAllMoviesBetween(int startYear, int endYear) {
         return movieRepository.findMoviesByYearReleasedBetween(startYear, endYear)
                 .map(m -> AppUtils.entityToDto2(m))
-                .switchIfEmpty(Flux.empty());     // Range.closed(startYear, endYear)
+                .collectList()
+                .flatMap(o -> buildAppResponse(o))
+                .switchIfEmpty(Mono.empty());     // Range.closed(startYear, endYear)
     }
 
     @Override
@@ -103,5 +99,18 @@ public class MovieServiceImpl implements MovieService {
     private Movie throwErrorIfExist(Movie movie) {
         String message = "Movie with title '" + movie.getTitle() + "' already exists";
         throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_MOVIE_ALREADY_EXIST, message);
+    }
+    private Movie throwErrorIfNotExist(Movie movie) {
+        String message = "Movie with title '" + movie.getTitle() + "' does not exist exists";
+        throw new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_ALREADY_EXIST, message);
+    }
+
+    private Mono<AppResponse> buildAppResponse(Object movies) {   // Object can also be List
+        return Mono.just(AppResponse.builder()
+                        .statusCode("200")
+                        .httpStatus(HttpStatus.OK)
+                        .message("Successful")
+                        .data(movies)
+                        .build());
     }
 }

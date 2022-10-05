@@ -2,6 +2,7 @@ package com.faithfulolaleru.movieRentalReactive.controllers;
 
 import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
+import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import com.faithfulolaleru.movieRentalReactive.service.MovieService;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class MovieController {
 
 
     @GetMapping("/")
-    public Flux<MovieResponse> getAllMovies(){
+    public Mono<AppResponse> getAllMovies(){
 
         return movieService.getAllMovies();
     }
@@ -29,14 +30,15 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<MovieResponse>> getAllMovies(@PathVariable("id") String id){
+    public Mono<AppResponse> getAllMovies(@PathVariable("id") String id){
 
-        return movieService.getMovieById(id).map(ResponseEntity::ok);
+        // return movieService.getMovieById(id).map(ResponseEntity::ok);
+        return movieService.getMovieById(id);
     }
 
     @GetMapping("/between")
-    public Flux<MovieResponse> getAllMoviesBetweenYear(@RequestParam(value = "startDate") int startDate,
-                                                                       @RequestParam(value = "endDate") int endDateDate) {
+    public Mono<AppResponse>  getAllMoviesBetweenYear(@RequestParam(value = "startDate") int startDate,
+                                                      @RequestParam(value = "endDate") int endDateDate) {
 
         return movieService.getAllMoviesBetween(startDate, endDateDate);   // .map(ResponseEntity::ok);
     }
