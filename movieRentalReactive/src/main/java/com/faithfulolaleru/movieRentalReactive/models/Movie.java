@@ -21,8 +21,8 @@ public class Movie {
     private String title;
 
     @Size(max = 4)
-    private int yearReleased;
+    private Integer yearReleased;
     private String mainActor;
-    private boolean isBlockBuster;
+    private Boolean isBlockBuster;
 
 }

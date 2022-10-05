@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface MovieService {
 
-    public Mono<MovieResponse> createMovie(MovieRequest request);
+    public Mono<AppResponse> createMovie(MovieRequest request);
 
     public Mono<AppResponse> getMovieById(String id);
 
@@ -16,8 +16,8 @@ public interface MovieService {
 
     public Mono<AppResponse>  getAllMoviesBetween(int startYear, int endYear);
 
-    public Mono<MovieResponse> updateMovieById(MovieRequest request, String id);
+    public Mono<AppResponse> updateMovieById(MovieRequest request, String id);
 
-    public Mono<Void> deleteMovieById(String id);
+    public Mono<AppResponse> deleteMovieById(String id);
 
 }

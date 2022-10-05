@@ -24,13 +24,14 @@ public class MovieController {
         return movieService.getAllMovies();
     }
     @PostMapping("/")
-    public Mono<ResponseEntity<MovieResponse>> createMovie(@RequestBody MovieRequest request) {
+    public Mono<AppResponse> createMovie(@RequestBody MovieRequest request) {
 
-        return movieService.createMovie(request).map(ResponseEntity::ok);
+        // return movieService.createMovie(request).map(ResponseEntity::ok);
+        return movieService.createMovie(request);
     }
 
     @GetMapping("/{id}")
-    public Mono<AppResponse> getAllMovies(@PathVariable("id") String id){
+    public Mono<AppResponse> getMovieById(@PathVariable("id") String id){
 
         // return movieService.getMovieById(id).map(ResponseEntity::ok);
         return movieService.getMovieById(id);
@@ -41,6 +42,19 @@ public class MovieController {
                                                       @RequestParam(value = "endDate") int endDateDate) {
 
         return movieService.getAllMoviesBetween(startDate, endDateDate);   // .map(ResponseEntity::ok);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<AppResponse> updateMovieById(@PathVariable("id") String id,
+                                             @RequestBody MovieRequest request) {
+
+        return movieService.updateMovieById(request, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public Mono<AppResponse> deleteMovieById(@PathVariable("id") String id) {
+
+        return movieService.deleteMovieById(id);
     }
 
 

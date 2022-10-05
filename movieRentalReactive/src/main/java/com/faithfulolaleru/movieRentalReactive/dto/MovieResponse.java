@@ -13,7 +13,7 @@ public class MovieResponse {
 
     private String id;
     private String title;
-    private int yearReleased;
+    private Integer yearReleased;
     private String mainActor;
-    private boolean isBlockBuster;
+    private Boolean isBlockBuster;
 }

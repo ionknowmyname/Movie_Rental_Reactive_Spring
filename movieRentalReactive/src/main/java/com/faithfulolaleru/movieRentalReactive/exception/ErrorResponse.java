@@ -12,7 +12,7 @@ public class ErrorResponse {
 
     public static final String ERROR_MOVIE_ALREADY_EXIST = "MOVIE_ALREADY_EXISTS";
 
-    public static final String ERROR_MOVIE_NOT_EXIST = "MOVIE_DOES_NOT_EXISTS";
+    public static final String ERROR_MOVIE_NOT_EXIST = "MOVIE_DOES_NOT_EXIST";
 
 
 

@@ -20,7 +20,7 @@ public class AppUtils {
                 .title(movie.getTitle())
                 .yearReleased(movie.getYearReleased())
                 .mainActor(movie.getMainActor())
-                .isBlockBuster(movie.isBlockBuster())
+                .isBlockBuster(movie.getIsBlockBuster())
                 .build();
 
         return response;
@@ -31,7 +31,7 @@ public class AppUtils {
                 .title(request.getTitle())
                 .yearReleased(request.getYearReleased())
                 .mainActor(request.getMainActor())
-                .isBlockBuster(request.isBlockBuster())
+                .isBlockBuster(request.getIsBlockBuster())
                 .build();
 
         return movie;
