@@ -35,6 +35,7 @@ public class MovieServiceImpl implements MovieService {
                         .yearReleased(request.getYearReleased())
                         .mainActor(request.getMainActor())
                         .isBlockBuster(request.getIsBlockBuster())
+                        .perDayCost(request.getPerDayCost())
                         .build()))
                 .map(AppUtils::entityToDto2)
                 .flatMap(o -> AppUtils.buildAppResponse(o, "Created Successfully"));
@@ -92,12 +93,24 @@ public class MovieServiceImpl implements MovieService {
 //        return Mono.justOrEmpty(movieRepository.findById(id))
 //                .flatMap(movie -> deleteMovie(id, movie))
 //                .then(buildAppResponse("Deleted Successfully"));
+
         movieRepository.findById(id)
+                .map(movie -> AppUtils.entityToDto2(movie))
+                .flatMap(o -> AppUtils.buildAppResponse(o, "Successful"))
                 .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,
                         ErrorResponse.ERROR_MOVIE_NOT_EXIST,
                         "Movie with id doesn't exist")));
 
         return movieRepository.deleteById(id);
+
+    /*    return movieRepository.findById(id)
+                .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,
+                        ErrorResponse.ERROR_MOVIE_NOT_EXIST,
+                        "Movie with id doesn't exist")))
+                .flatMap(movie -> movieRepository.deleteById(id));*/
+
+
+        // return movieRepository.deleteById(id);
                 //.flatMap()
                 // .switchIfEmpty(AppUtils.buildAppResponse("Successfully Deleted"));
 
@@ -105,6 +118,7 @@ public class MovieServiceImpl implements MovieService {
                 .map(movie -> throwErrorIfNotExist(movie))
                 .flatMap(movie -> movieRepository.delete(movie))
                 .flatMap(o -> AppUtils.buildAppResponse("Successfully Deleted"));*/
+
 
 //                .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,
 //                        ErrorResponse.ERROR_MOVIE_NOT_EXIST,
@@ -143,6 +157,7 @@ public class MovieServiceImpl implements MovieService {
                 .isBlockBuster((request.getIsBlockBuster() != null) ? request.getIsBlockBuster() : movie.getIsBlockBuster())
                 .mainActor((request.getMainActor() != null) ? request.getMainActor() : movie.getMainActor())
                 .yearReleased((request.getYearReleased() != null) ? request.getYearReleased() : movie.getYearReleased())
+                .perDayCost((request.getPerDayCost() != null) ? request.getPerDayCost() : movie.getPerDayCost())
                 .build();
 
         return movieRepository.save(newMovie);

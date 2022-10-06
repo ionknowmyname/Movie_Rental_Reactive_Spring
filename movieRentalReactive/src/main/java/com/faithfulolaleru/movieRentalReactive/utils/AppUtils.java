@@ -24,6 +24,7 @@ public class AppUtils {
                 .yearReleased(movie.getYearReleased())
                 .mainActor(movie.getMainActor())
                 .isBlockBuster(movie.getIsBlockBuster())
+                .perDayCost(movie.getPerDayCost())
                 .build();
 
         return response;
@@ -35,6 +36,7 @@ public class AppUtils {
                 .yearReleased(request.getYearReleased())
                 .mainActor(request.getMainActor())
                 .isBlockBuster(request.getIsBlockBuster())
+                .perDayCost(request.getPerDayCost())
                 .build();
 
         return movie;

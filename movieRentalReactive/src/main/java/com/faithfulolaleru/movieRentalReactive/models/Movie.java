@@ -24,5 +24,6 @@ public class Movie {
     private Integer yearReleased;
     private String mainActor;
     private Boolean isBlockBuster;
+    private Double perDayCost;
 
 }

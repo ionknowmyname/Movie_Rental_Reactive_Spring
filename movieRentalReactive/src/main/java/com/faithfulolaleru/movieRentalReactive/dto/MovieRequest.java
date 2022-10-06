@@ -13,4 +13,5 @@ public class MovieRequest {
     private Integer yearReleased;
     private String mainActor;
     private Boolean isBlockBuster = false;
+    private Double perDayCost;
 }
