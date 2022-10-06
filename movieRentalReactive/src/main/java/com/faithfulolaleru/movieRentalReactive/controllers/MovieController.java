@@ -4,6 +4,7 @@ import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
 import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import com.faithfulolaleru.movieRentalReactive.service.MovieService;
+import com.faithfulolaleru.movieRentalReactive.utils.AppUtils;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +55,10 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public Mono<AppResponse> deleteMovieById(@PathVariable("id") String id) {
 
-        return movieService.deleteMovieById(id);
+        // Mono<Void> voidMono =
+        Mono<Void> voidMono = movieService.deleteMovieById(id);
+
+        return AppUtils.buildAppResponse("Successfully Deleted movie");
     }
 
 

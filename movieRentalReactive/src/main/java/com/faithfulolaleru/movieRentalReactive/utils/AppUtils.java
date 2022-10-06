@@ -3,7 +3,10 @@ package com.faithfulolaleru.movieRentalReactive.utils;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
+import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import reactor.core.publisher.Mono;
 
 public class AppUtils {
 
@@ -35,5 +38,23 @@ public class AppUtils {
                 .build();
 
         return movie;
+    }
+
+    public static Mono<AppResponse> buildAppResponse(Object movies, String message) {   // Object can also be List
+        return Mono.just(AppResponse.builder()
+                .statusCode("200")
+                .httpStatus(HttpStatus.OK)
+                .message(message)
+                .data(movies)
+                .build());
+    }
+
+    public static Mono<AppResponse> buildAppResponse(String message) {   // Object can also be List
+        return Mono.just(AppResponse.builder()
+                .statusCode("200")
+                .httpStatus(HttpStatus.OK)
+                .message(message)
+                .data(null)
+                .build());
     }
 }

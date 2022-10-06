@@ -18,6 +18,6 @@ public interface MovieService {
 
     public Mono<AppResponse> updateMovieById(MovieRequest request, String id);
 
-    public Mono<AppResponse> deleteMovieById(String id);
+    public Mono<Void> deleteMovieById(String id);
 
 }
