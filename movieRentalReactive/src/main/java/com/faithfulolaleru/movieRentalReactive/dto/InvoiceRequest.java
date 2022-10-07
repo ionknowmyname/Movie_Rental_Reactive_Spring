@@ -1,5 +1,7 @@
 package com.faithfulolaleru.movieRentalReactive.dto;
 
+import com.faithfulolaleru.movieRentalReactive.models.Movie;
+import com.faithfulolaleru.movieRentalReactive.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +13,9 @@ import java.time.Instant;
 @NoArgsConstructor
 public class InvoiceRequest {
 
-    private String movieTitle;
-    private Instant startDate;
+    private Movie movie;
+    private Instant rentStartDate;
     private Integer rentDays;
     private Double rentCost;
-
-    // add user later
+    private User user;
 }

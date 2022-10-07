@@ -5,27 +5,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Size;
+import java.time.Instant;
 
 @Data
-@Document(collection = "movies-reactive")
+@Document(collection = "invoices-reactive")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movie {
+public class Invoice {
 
     @Id
     private String id;
 
-    private String title;
+    @DBRef
+    private Movie movie;
 
-    @Size(max = 4)
-    private Integer yearReleased;
+    @DBRef
+    private User user;
 
-    private String mainActor;
-    private Boolean isBlockBuster;
-    private Double perDayCost;
-
+    private Instant rentStartDate;
+    private Integer rentDays;
+    private Double rentCost;
 }

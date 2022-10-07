@@ -1,7 +1,9 @@
 package com.faithfulolaleru.movieRentalReactive.utils;
 
+import com.faithfulolaleru.movieRentalReactive.dto.InvoiceResponse;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
+import com.faithfulolaleru.movieRentalReactive.models.Invoice;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
 import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +27,18 @@ public class AppUtils {
                 .mainActor(movie.getMainActor())
                 .isBlockBuster(movie.getIsBlockBuster())
                 .perDayCost(movie.getPerDayCost())
+                .build();
+
+        return response;
+    }
+
+    public static InvoiceResponse entityToDto2(Invoice invoice) {
+        InvoiceResponse response = InvoiceResponse.builder()
+                .id(invoice.getId())
+                .movie(invoice.getMovie())
+                .rentStartDate(invoice.getRentStartDate())
+                .rentDays(invoice.getRentDays())
+                .rentCost(invoice.getRentCost())
                 .build();
 
         return response;

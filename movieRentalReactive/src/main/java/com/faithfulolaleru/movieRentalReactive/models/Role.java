@@ -1,31 +1,20 @@
 package com.faithfulolaleru.movieRentalReactive.models;
 
+import com.faithfulolaleru.movieRentalReactive.enums.RoleName;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Size;
-
 @Data
-@Document(collection = "movies-reactive")
-@Builder
+@Document(collection = "roles-reactive")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movie {
+public class Role {
 
     @Id
     private String id;
 
-    private String title;
-
-    @Size(max = 4)
-    private Integer yearReleased;
-
-    private String mainActor;
-    private Boolean isBlockBuster;
-    private Double perDayCost;
-
+    private RoleName name;
 }
