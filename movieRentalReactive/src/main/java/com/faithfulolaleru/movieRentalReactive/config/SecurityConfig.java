@@ -1,21 +1,33 @@
 package com.faithfulolaleru.movieRentalReactive.config;
 
+import com.faithfulolaleru.movieRentalReactive.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 
 import static com.faithfulolaleru.movieRentalReactive.enums.RoleName.ROLE_ADMIN;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity     // to authenticate methods
+@AllArgsConstructor
 public class SecurityConfig {
 
+    private UserRepository userRepository;
 
+    private AuthenticationManager authenticationManager;
+
+    private SecurityContextRepository securityContextRepository;
 
 
     @Bean
@@ -24,13 +36,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public MapReactiveUserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+    public ReactiveUserDetailsService userDetailsService() {
+        /*UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("user")
                 .roles("USER")
                 .build();
-        return new MapReactiveUserDetailsService(user);
+        return new MapReactiveUserDetailsService(user);*/
+
+        return (name) -> userRepository.findByUsername(name);
     }
 
     @Bean
@@ -45,6 +59,10 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
+                .authenticationManager(authenticationManager)
+                .securityContextRepository(securityContextRepository)
+                .requestCache().requestCache(NoOpServerRequestCache.getInstance())
+                .and()
                 .build();
     }
 
