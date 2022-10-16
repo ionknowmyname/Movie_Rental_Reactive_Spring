@@ -1,8 +1,10 @@
 package com.faithfulolaleru.movieRentalReactive.controllers;
 
+import com.faithfulolaleru.movieRentalReactive.config.AuthenticationManager;
 import com.faithfulolaleru.movieRentalReactive.dto.LoginRequest;
 import com.faithfulolaleru.movieRentalReactive.dto.LoginResponse;
 import com.faithfulolaleru.movieRentalReactive.exception.GeneralException;
+import com.faithfulolaleru.movieRentalReactive.repository.UserRepository;
 import com.faithfulolaleru.movieRentalReactive.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +25,16 @@ public class AuthController {
 
     private final TokenService tokenService;
 
+    private final UserRepository userRepository;
+
+    private final AuthenticationManager authenticationManager;
+
 
 
     @PostMapping(value = "/generate-token")
     public ResponseEntity<LoginResponse> generateToken(@RequestBody LoginRequest request) {
+        /*
+
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(
@@ -48,5 +56,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthTokenDto token = tokenService.generateToken(authentication);
         return ResponseEntity.ok().body(token);
+
+        */
+
+
+        return userRepository.findByUsername(request.getUsername())
+                .map(user -> )
     }
 }

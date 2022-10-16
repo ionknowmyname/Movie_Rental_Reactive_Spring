@@ -1,20 +1,13 @@
-package com.faithfulolaleru.movieRentalReactive.security.jwt;
+package com.faithfulolaleru.movieRentalReactive.config;
 
-import com.bezkoder.spring.jwt.mongodb.security.services.UserDetailsImpl;
 import com.faithfulolaleru.movieRentalReactive.models.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.Key;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -33,6 +26,7 @@ public class JwtUtils {
 		Map<String, Object> claim = new HashMap<>();
 		claim.put("alg", "HS256");
 		claim.put("typ", "JWT");
+		claim.put("role", List.of(user.getRole()));
 
 		return Jwts.builder()
 				.setSubject(user.getUsername())

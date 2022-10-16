@@ -44,24 +44,25 @@ public class SecurityConfig {
                 .build();
         return new MapReactiveUserDetailsService(user);*/
 
-        return (name) -> userRepository.findByUsername(name);
+        return (name) -> userRepository.findByUsername(name).cast(UserDetails.class);
     }
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(
             ServerHttpSecurity http) {
 
-        return http.authorizeExchange()
-                .pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                .pathMatchers("/api/v1/invoices/**").hasAuthority(ROLE_ADMIN.name())
-                .anyExchange().authenticated()
-                .and()
+        return http
+                .exceptionHandling()
+                .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
-                .csrf().disable()
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .requestCache().requestCache(NoOpServerRequestCache.getInstance())
+                .authorizeExchange()
+                .pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                .pathMatchers("/api/v1/invoices/**").hasAuthority(ROLE_ADMIN.name())
+                .anyExchange().authenticated()
                 .and()
                 .build();
     }

@@ -89,10 +89,16 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Mono<Void> deleteMovieById(String id) {
 
+        return movieRepository.findById(id)
+                .flatMap(movie -> movie.)
+
+
 
 //        return Mono.justOrEmpty(movieRepository.findById(id))
 //                .flatMap(movie -> deleteMovie(id, movie))
 //                .then(buildAppResponse("Deleted Successfully"));
+
+        /*  latest comment
 
         movieRepository.findById(id)
                 .map(movie -> AppUtils.entityToDto2(movie))
@@ -102,6 +108,8 @@ public class MovieServiceImpl implements MovieService {
                         "Movie with id doesn't exist")));
 
         return movieRepository.deleteById(id);
+
+        */
 
     /*    return movieRepository.findById(id)
                 .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,

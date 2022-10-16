@@ -22,12 +22,19 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
-        return Mono.empty();
+
+        throw new IllegalStateException("Save method not supported!");
+
+        // return Mono.empty();
     }
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
+
+        /*   1st Impl
+
         String bearer = "Bearer ";
+        
         return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(b -> b.startsWith(bearer))
                 .map(subs -> subs.substring(bearer.length()))
@@ -38,5 +45,24 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                         )))
                 .flatMap(auth -> authenticationManager.authenticate(auth).map(SecurityContextImpl::new));
+
+        */
+
+
+        String authHeader = exchange.getRequest()
+                .getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+        if(authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+
+            UsernamePasswordAuthenticationToken auth
+                    = new UsernamePasswordAuthenticationToken(token, token);
+
+            return authenticationManager
+                    .authenticate(auth)
+                    .map(SecurityContextImpl::new);
+        }
+
+        return Mono.empty();
     }
 }
