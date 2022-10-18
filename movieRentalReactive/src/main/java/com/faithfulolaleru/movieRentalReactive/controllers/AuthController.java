@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final TokenService tokenService;
+    // private final TokenService tokenService;
 
     private final UserRepository userRepository;
 

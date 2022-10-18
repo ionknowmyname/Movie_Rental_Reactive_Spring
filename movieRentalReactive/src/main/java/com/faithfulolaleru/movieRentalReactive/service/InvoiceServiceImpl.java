@@ -74,12 +74,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
 
-    private Invoice throwErrorIfExist(Invoice invoice) {
-        String message = "Movie with title '" + movie.getTitle() + "' already exists";
-        throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_INVOICE_ALREADY_EXIST, message);
-    }
-    private Invoice throwErrorIfNotExist(Invoice invoice) {
-        String message = "Movie with title '" + movie.getTitle() + "' does not exist";
-        throw new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_NOT_EXIST, message);
-    }
+//    private Invoice throwErrorIfExist(Invoice invoice) {
+//        String message = "Movie with title '" + movie.getTitle() + "' already exists";
+//        throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_INVOICE_ALREADY_EXIST, message);
+//    }
+//    private Invoice throwErrorIfNotExist(Invoice invoice) {
+//        String message = "Movie with title '" + movie.getTitle() + "' does not exist";
+//        throw new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_NOT_EXIST, message);
+//    }
 }

@@ -55,10 +55,10 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public Mono<AppResponse> deleteMovieById(@PathVariable("id") String id) {
 
-        // Mono<Void> voidMono =
-        Mono<Void> voidMono = movieService.deleteMovieById(id);
+        // Mono<Void> voidMono =   // Mono<AppResponse> voidMono
+        return movieService.deleteMovieById(id);
 
-        return AppUtils.buildAppResponse("Successfully Deleted movie");
+        // return AppUtils.buildAppResponse("Successfully Deleted movie");
     }
 
 
