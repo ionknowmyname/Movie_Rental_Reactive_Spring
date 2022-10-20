@@ -18,6 +18,8 @@ public class ErrorResponse {
 
     public static final String ERROR_INVOICE_NOT_EXIST = "INVOICE_DOES_NOT_EXIST";
 
+    public static final String ERROR_USER_ALREADY_EXIST = "USER_ALREADY_EXISTS";
+
 
 
     private String error;

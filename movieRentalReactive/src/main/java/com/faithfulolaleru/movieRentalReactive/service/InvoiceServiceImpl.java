@@ -5,9 +5,13 @@ import com.faithfulolaleru.movieRentalReactive.exception.ErrorResponse;
 import com.faithfulolaleru.movieRentalReactive.exception.GeneralException;
 import com.faithfulolaleru.movieRentalReactive.models.Invoice;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
+import com.faithfulolaleru.movieRentalReactive.models.User;
 import com.faithfulolaleru.movieRentalReactive.repository.InvoiceRepository;
 import com.faithfulolaleru.movieRentalReactive.response.AppResponse;
 import com.faithfulolaleru.movieRentalReactive.utils.AppUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,19 +20,24 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
+//@Data
+@AllArgsConstructor
+//@NoArgsConstructor
 @Slf4j
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
+
+    private final AppUtils appUtils;
 
 
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public Mono<AppResponse> createInvoice(InvoiceRequest request) {
-        // get user
-        return invoiceRepository.findInvoiceByUserAndMovie(user, request.getMovie())
+        User currentUser = appUtils.getCurrentUser();
+
+        return invoiceRepository.findInvoiceByUserAndMovie(currentUser, request.getMovie())
                 .map(invoice -> throwErrorIfExist(invoice))
                 .switchIfEmpty(invoiceRepository.save(Invoice.builder()
                         .movie(request.getMovie())
@@ -74,10 +83,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
 
-//    private Invoice throwErrorIfExist(Invoice invoice) {
-//        String message = "Movie with title '" + movie.getTitle() + "' already exists";
-//        throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_INVOICE_ALREADY_EXIST, message);
-//    }
+    private Invoice throwErrorIfExist(Invoice invoice) {
+        String message = "Invoice for movie with title '" + invoice.getMovie().getTitle() + "' already exists";
+        throw new GeneralException(HttpStatus.CONFLICT, ErrorResponse.ERROR_INVOICE_ALREADY_EXIST, message);
+    }
 //    private Invoice throwErrorIfNotExist(Invoice invoice) {
 //        String message = "Movie with title '" + movie.getTitle() + "' does not exist";
 //        throw new GeneralException(HttpStatus.NOT_FOUND, ErrorResponse.ERROR_MOVIE_NOT_EXIST, message);

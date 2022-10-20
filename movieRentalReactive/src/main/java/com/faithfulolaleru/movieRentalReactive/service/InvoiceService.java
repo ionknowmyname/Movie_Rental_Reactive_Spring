@@ -6,13 +6,13 @@ import reactor.core.publisher.Mono;
 
 public interface InvoiceService {
 
-    public Mono<AppResponse> createInvoice(InvoiceRequest request);
+    Mono<AppResponse> createInvoice(InvoiceRequest request);
 
-    public Mono<AppResponse> getInvoiceById(String id);
+    Mono<AppResponse> getInvoiceById(String id);
 
-    public Mono<AppResponse> getAllInvoices();
+    Mono<AppResponse> getAllInvoices();
 
-    public Mono<AppResponse> updateInvoiceById(InvoiceRequest request, String id);
+    Mono<AppResponse> updateInvoiceById(InvoiceRequest request, String id);
 
-    public Mono<Void> deleteInvoiceById(String id);
+    Mono<Void> deleteInvoiceById(String id);
 }

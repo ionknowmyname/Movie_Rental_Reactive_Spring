@@ -33,7 +33,8 @@ public class JwtUtils {
 				.setIssuedAt(now)
 				.setExpiration(new Date(now.getTime() + Long.parseLong(expireTimeInMilliSec) * 1000))
 				.signWith(SignatureAlgorithm.HS512, Base64.getEncoder().encodeToString(jwtSecret.getBytes()))   // or just regular jwtSecret
-				.setHeaderParams(claim)
+				// .setHeaderParams(claim)
+				.setClaims(claim)
 				.compact();
 	}
 
