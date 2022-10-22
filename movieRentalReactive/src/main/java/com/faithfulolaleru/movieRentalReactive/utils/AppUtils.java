@@ -1,9 +1,6 @@
 package com.faithfulolaleru.movieRentalReactive.utils;
 
-import com.faithfulolaleru.movieRentalReactive.dto.InvoiceResponse;
-import com.faithfulolaleru.movieRentalReactive.dto.MovieRequest;
-import com.faithfulolaleru.movieRentalReactive.dto.MovieResponse;
-import com.faithfulolaleru.movieRentalReactive.dto.UserCreateResponse;
+import com.faithfulolaleru.movieRentalReactive.dto.*;
 
 import com.faithfulolaleru.movieRentalReactive.models.Invoice;
 import com.faithfulolaleru.movieRentalReactive.models.Movie;
@@ -82,6 +79,18 @@ public class AppUtils {
                 .build();
 
         return movie;
+    }
+
+    public static Invoice dtoToEntity(InvoiceRequest request) {
+        Invoice invoice = Invoice.builder()
+                .movie(request.getMovie())
+                .user(request.getUser())
+                .rentStartDate(request.getRentStartDate())
+                .rentDays(request.getRentDays())
+                .rentCost(request.getRentCost())
+                .build();
+
+        return invoice;
     }
 
     public static Mono<AppResponse> buildAppResponse(Object data, String message) {   // Object can also be List

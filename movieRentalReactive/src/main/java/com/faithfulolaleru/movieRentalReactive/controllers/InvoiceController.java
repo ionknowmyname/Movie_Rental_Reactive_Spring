@@ -35,7 +35,7 @@ public class InvoiceController {
 
     @PutMapping("/{id}")
     public Mono<AppResponse> updateInvoiceById(@PathVariable("id") String id,
-                                             @RequestBody InvoiceRequest request) {
+                                             @RequestBody Mono<InvoiceRequest> request) {
 
         return invoiceService.updateInvoiceById(request, id);
     }

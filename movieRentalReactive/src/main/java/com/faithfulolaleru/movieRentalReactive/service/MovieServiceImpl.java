@@ -75,6 +75,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Mono<AppResponse> updateMovieById(MovieRequest request, String id) {
 
+        // Compare this update with invoice update
         return movieRepository.findById(id)
                 .flatMap(movie -> updateMovie(request, movie))
                 .map(AppUtils::entityToDto2)
@@ -83,7 +84,6 @@ public class MovieServiceImpl implements MovieService {
                         ErrorResponse.ERROR_MOVIE_NOT_EXIST,
                         "Movie with id doesn't exist")));
 
-                // .map(movie -> throwErrorIfNotExist(movie))
     }
 
     @Override

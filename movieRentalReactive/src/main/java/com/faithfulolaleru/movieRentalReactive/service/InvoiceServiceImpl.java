@@ -72,8 +72,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public Mono<AppResponse> updateInvoiceById(InvoiceRequest request, String id) {
-        return null;
+    public Mono<AppResponse> updateInvoiceById(Mono<InvoiceRequest> request, String id) {
+
+        return invoiceRepository.findById(id)
+                .flatMap(invoice -> request
+                        .map(AppUtils::dtoToEntity)
+                        .doOnNext(i -> i.setId(id))
+                        .flatMap(invoiceRepository::save)
+                        .flatMap(o -> AppUtils.buildAppResponse(o, "Updated Successfully"))
+                        .switchIfEmpty(Mono.error(new GeneralException(HttpStatus.NOT_FOUND,
+                                ErrorResponse.ERROR_INVOICE_NOT_EXIST,
+                                "Invoice with id doesn't exist"))));
     }
 
     @Override

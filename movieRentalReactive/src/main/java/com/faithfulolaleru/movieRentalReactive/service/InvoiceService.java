@@ -12,7 +12,7 @@ public interface InvoiceService {
 
     Mono<AppResponse> getAllInvoices();
 
-    Mono<AppResponse> updateInvoiceById(InvoiceRequest request, String id);
+    Mono<AppResponse> updateInvoiceById(Mono<InvoiceRequest> request, String id);
 
     Mono<Void> deleteInvoiceById(String id);
 }
